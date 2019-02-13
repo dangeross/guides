@@ -13,6 +13,8 @@ Wrapper for Lightning Network Daemon. It provides separate accounts with minimum
 *Difficulty: medium*
 
 ## Install Redis
+Login as "admin"
+
 Download Redis
 ```
 $ cd /home/admin/download
@@ -26,7 +28,7 @@ Make & install
 $ make
 $ sudo make install
 ```
-Create the working directory for Redis. We will create it on the external hard disk.
+Create the working directory for Redis. We will create it on the external hard disk
 ```
 $ sudo mkdir /mnt/hdd/redis
 ```
@@ -72,7 +74,7 @@ dir /mnt/hdd/redis
 ```
 
 ### Autostart Redis
-Setup Redis to start automatically on system startup.
+Setup Redis to start automatically on system startup. Edit the system service config for redis
 ```
 $ sudo nano /etc/systemd/system/redis.service
 ```
@@ -136,6 +138,118 @@ Clean up
 ```
 $ rm -rf /home/admin/download/*
 ```
+## Unlock LND
+Make sure your lnd node is unlocked before running LndHub
+```
+$ lncli unlock
+```
+
+## Install LndHub
+Switch user to bitcoin
+```
+$ su - bitcoin
+```
+Clone the LndHub repository
+```
+$ git clone https://github.com/BlueWallet/LndHub
+```
+Copy the `tls.cert` and `admin.macaroon` files into LndHub
+```
+$ cp .lnd/data/chain/bitcoin/mainnet/admin.macaroon LndHub/
+$ cp .lnd/tls.cert LndHub/
+```
+Edit the LndHub `config.js` file to add bitcoin RPC credentials
+```
+$ cd LndHub/
+$ nano config.js
+```
+Edit the `config.js` file 
+* Change bitcoind.rpc `login:password` to match the rpcuser & rpcpassword in your bitcoin.conf
+* Change all the IP addresses from `1.1.1.1` to `127.0.0.1`
+* Change the redis port from `12914` to `6379`
+```
+let config = {
+  bitcoind: {
+    rpc: 'http://rpcuser:rpcpassword@127.0.0.1:8332',
+  },
+  redis: {
+    port: 6379,
+    host: '127.0.0.1',
+    family: 4,
+    db: 0,
+  },
+  lnd: {
+    url: '127.0.0.1:10009',
+  },
+};
+```
+Install required node modules
+```
+$ npm config set prefix '~/.npm-global'
+$ npm install
+```
+Compile babeljs
+```
+$ npm install -g babel-cli
+$ mkdir build
+$ babel ./ --out-dir ./build --copy-files --ignore node_module
+```
+Run LndHub
+```
+$ node build/index.js
+```
+Check for `'BOOTING UP' 'Listening on port 3000'`
+
+### Autostart LndHub
+Setup LndHub to start automatically on system startup. Switch back to the "admin" user or login as "admin"
+```
+$ exit
+```
+Edit the system service config for LndHub
+```
+$ sudo nano /etc/systemd/system/lndhub.service
+```
+```
+[Unit]
+Description=LndHub Wrapper for Lightning Daemon
+Wants=lnd.service
+After=lnd.service
+
+[Service]
+WorkingDirectory=/home/bitcoin/LndHub
+ExecStart=/usr/local/bin/node build/index.js
+
+User=bitcoin
+Group=bitcoin
+Type=simple
+KillMode=process
+LimitNOFILE=128000
+TimeoutSec=240
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+```
+Start up LndHub via the systemctl
+```
+$ sudo systemctl enable lndhub
+$ sudo systemctl start lndhub
+```
+Check the lndhub log file
+```
+$ sudo journalctl -f -u lndhub
+```
+
+LndHub should now be ready to use in the BlueWallet, but first
+* In your brower enter the RaspiBolt IP and port 3000 to see if you can get the default LndHub page, eg: http://192.168.0.10:3000
+* In that page you should see the configured LND uri, eg `03fbceea6554714aa4c94648a64d60860d87ac758ca99bdff20e7dce1b0764696d@77.47.67.53:9735`
+* That should be your LND node address
+* In the BlueWallet app, configure your Lightning Settings to http://LND_IP_ADDRESS:3000
+* Add a new Lightning Wallet
+* Monitor the `journalctl` to see if the app is making requests
+
+
 
 
 
