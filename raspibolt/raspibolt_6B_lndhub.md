@@ -12,7 +12,7 @@ Wrapper for Lightning Network Daemon. It provides separate accounts with minimum
 
 *Difficulty: medium*
 
-### Install Redis
+## Install Redis
 Download Redis
 ```
 $ cd /home/admin/download
@@ -71,7 +71,7 @@ Find `dir` and set it to `/mnt/hdd/redis`
 dir /mnt/hdd/redis
 ```
 
-## Autostart Redis
+### Autostart Redis
 Setup Redis to start automatically on system startup.
 ```
 $ sudo nano /etc/systemd/system/redis.service
@@ -107,3 +107,35 @@ Enable the service
 ```
 $ sudo systemctl enable redis
 ```
+Clean up
+```
+$ rm -rf /home/admin/download/*
+```
+## Install Node
+Download Node
+```
+$ cd /home/admin/download
+$ wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-linux-armv7l.tar.xz
+```
+Extract to `usr/local/lib`
+```
+$ sudo mkdir /usr/local/lib/nodejs/node-v10.15.1
+$ sudo tar -xf node-v10.15.1-linux-armv7l.tar.xz -C /usr/local/lib/nodejs/node-v10.15.1
+```
+Link node version into `/usr/local/bin`
+```
+$ sudo ln -s /usr/local/lib/nodejs/node-v10.15.1/bin/node /usr/local/bin/node
+$ sudo ln -s /usr/local/lib/nodejs/node-v10.15.1/bin/npm /usr/local/bin/npm
+```
+Test node & npm is linked correctly
+```
+$ node -v
+$ npm -v
+```
+Clean up
+```
+$ rm -rf /home/admin/download/*
+```
+
+
+
