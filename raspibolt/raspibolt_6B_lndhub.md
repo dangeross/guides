@@ -186,6 +186,7 @@ let config = {
 Install required node modules
 ```
 $ npm config set prefix '~/.npm-global'
+$ export PATH=~/.npm-global/bin:$PATH
 $ npm install
 ```
 Compile babeljs
