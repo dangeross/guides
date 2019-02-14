@@ -192,7 +192,7 @@ Compile babeljs
 ```
 $ npm install -g babel-cli
 $ mkdir build
-$ babel ./ --out-dir ./build --copy-files --ignore node_module
+$ babel ./ --out-dir ./build --copy-files --ignore node_modules
 ```
 Run LndHub
 ```
@@ -236,7 +236,7 @@ Start up LndHub via the systemctl
 $ sudo systemctl enable lndhub
 $ sudo systemctl start lndhub
 ```
-Check the lndhub log file
+Check the lndhub log file for `'BOOTING UP' 'Listening on port 3000'`
 ```
 $ sudo journalctl -f -u lndhub
 ```
