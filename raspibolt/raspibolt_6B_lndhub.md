@@ -164,7 +164,7 @@ $ cd LndHub/
 $ nano config.js
 ```
 Edit the `config.js` file 
-* Change bitcoind.rpc `login:password` to match the rpcuser & rpcpassword in your bitcoin.conf
+* Change bitcoind.rpc `login:password` to match the rpcuser & rpcpassword in your bitcoin.conf. Your rpcpassword may need to be URL encoded if it contains special characters. You can use an online service like https://meyerweb.com/eric/tools/dencoder/ to encode it (it does not send your rpcpassword anywhere).
 * Change all the IP addresses from `1.1.1.1` to `127.0.0.1`
 * Change the redis port from `12914` to `6379`
 ```
