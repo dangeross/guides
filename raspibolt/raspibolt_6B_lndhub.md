@@ -138,6 +138,22 @@ Clean up
 ```
 $ rm -rf /home/admin/download/*
 ```
+
+## Port Forwarding and Uncomplicated Firewall
+We need to open up port 3000 on the router and allow access through `ufw`. Follow the steps as you have done previously opening the port forwarding on your router. Add a new port forwarding configuration with the following settings:
+
+| Application name | External port | Internal port | Internal IP address | Protocol (TCP or UDP) |
+| ---------------- | ------------- | ------------- | ------------------- | --------------------- |
+| LndHub           | 3000          | 3000          | <YOUR:NODE:IP:ADDR> | TCP                   |
+
+Allowing access in ufw
+```
+$ sudo su
+$ ufw allow 3000 comment 'allow LndHub'
+$ ufw reload
+$ exit
+```
+
 ## Unlock LND
 Make sure your lnd node is unlocked before running LndHub
 ```
