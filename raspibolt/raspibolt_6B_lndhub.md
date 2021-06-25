@@ -207,7 +207,7 @@ $ npm install
 ```
 Compile babeljs
 ```
-$ npm install -g babel-cli
+$ npm install -g @babel/core @babel/cli
 $ mkdir build
 $ babel ./ --out-dir ./build --copy-files --ignore node_modules
 ```
