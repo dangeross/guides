@@ -45,7 +45,7 @@ $ sudo cp redis.conf /etc/redis
 ```
 Edit the `redis.conf` to change the supervised & dir options.
 ```
-$ nano /etc/redis/redis.conf
+$ sudo nano /etc/redis/redis.conf
 ```
 Find `supervised no` and change it to `supervised systemd`
 ```
@@ -121,7 +121,9 @@ $ wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-linux-armv7l.tar.xz
 ```
 Extract to `usr/local/lib`
 ```
+$ tar -xf node-v10.15.1-linux-armv7l.tar.xz
 $ sudo mkdir /usr/local/lib/nodejs/node-v10.15.1
+$ mv node-v10.15.1-linux-armv7l.tar.xz/* /usr/local/lib/nodejs/node-v10.15.1
 $ sudo tar -xf node-v10.15.1-linux-armv7l.tar.xz -C /usr/local/lib/nodejs/node-v10.15.1
 ```
 Link node version into `/usr/local/bin`
@@ -140,7 +142,7 @@ $ rm -rf /home/admin/download/*
 ```
 
 ## Port Forwarding and Uncomplicated Firewall
-We need to open up port 3000 on the router and allow access through `ufw`. Follow the steps as you have done previously opening the port forwarding on your router. Add a new port forwarding configuration with the following settings:
+We need to open up port 3000 *on the router* and allow access through `ufw`. Follow the steps as you have done previously opening the port forwarding on your router. Add a new port forwarding configuration with the following settings:
 
 | Application name | External port | Internal port | Internal IP address | Protocol (TCP or UDP) |
 | ---------------- | ------------- | ------------- | ------------------- | --------------------- |
@@ -148,9 +150,8 @@ We need to open up port 3000 on the router and allow access through `ufw`. Follo
 
 Allowing access in ufw
 ```
-$ sudo su
-$ ufw allow 3000 comment 'allow LndHub'
-$ ufw reload
+$ sudo ufw allow 3000 comment 'allow LndHub'
+$ sudo ufw reload
 $ exit
 ```
 
